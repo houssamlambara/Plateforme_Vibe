@@ -61,6 +61,14 @@
             @endif
         </div>
 
+        <div>
+            <x-input-label for="bio" :value="__('Bio')" />
+            <textarea id="bio" name="bio"
+                class="mt-1 block w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md p-3 focus:ring focus:ring-indigo-500 focus:border-indigo-500"
+                rows="4" placeholder="Parlez un peu de vous...">{{ old('bio', $user->bio) }}</textarea>
+            <x-input-error class="mt-2" :messages="$errors->get('bio')" />
+        </div>
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 

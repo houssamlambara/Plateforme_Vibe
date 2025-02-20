@@ -19,7 +19,7 @@
         <!-- Photo -->
         <div class="mt-4">
             <x-input-label for="photo" :value="__('profile_photo')" />
-            <x-text-input id="photo" class="block mt-1 w-full" type="file" name="profile_photo" accept="image/*" />
+            <x-text-input id="photo" class="block mt-1 w-full" type="file" name="profile_photo"  accept="image/*" />
             <x-input-error :messages="$errors->get('photo')" class="mt-2" />
         </div>
 
