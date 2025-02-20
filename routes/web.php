@@ -21,19 +21,19 @@ Route::middleware('auth')->group(function () {
 
 // TEEEST
 
-Route::get('/test', function (Request $request) {
+// Route::get('/test', function (Request $request) {
 
-    return [
-        "name" => $request->input('name', 'Houssam'),
-    ];
-});
+//     return [
+//         "name" => $request->input('name', 'Houssam'),
+//     ];
+// });
 
 // Route::get('/test/{slug}-{id}', function (string $slug, string $id) {
 
-//     // return [
-//     //     "slug"->$slug,
-//     //     "id"->$id
-//     // ];
+//     return [
+//         "slug"=>$slug,
+//         "id"=>$id
+//     ];
 // });
 
 require __DIR__ . '/auth.php';
