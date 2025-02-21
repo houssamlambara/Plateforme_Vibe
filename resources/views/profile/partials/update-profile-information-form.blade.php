@@ -17,8 +17,11 @@
         @csrf
         @method('patch')
 
+        <div>
         <img class="w-12 h-12 rounded-full object-cover border-2 border-gray-300 shadow-sm"
            style="height: 100px;" src="{{ asset('storage/' . $user->profile_photo) }}" alt="">
+           <input id="profile_photo" name="profile_photo" type="file">
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
