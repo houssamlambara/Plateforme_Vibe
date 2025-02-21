@@ -17,7 +17,7 @@
         @csrf
         @method('patch')
 
-        <img class="w-20 h-20 rounded-full object-cover border-2 border-gray-300 shadow-sm"
+        <img class="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-sm"
             src="{{ asset('storage/' . $user->profile_photo) }}" alt="">
 
         <div>
@@ -62,9 +62,9 @@
         </div>
 
         <div>
-            <x-input-label for="bio" :value="__('Bio')" />
+            <x-input-label for="bio" :value="__('bio')" />
             <textarea id="bio" name="bio"
-                class="mt-1 block w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md p-3 focus:ring focus:ring-indigo-500 focus:border-indigo-500"
+                class="mt-1 block w-full bg-gray-800 text-white border border-gray-600 rounded-md p-3 focus:ring focus:ring-indigo-500 focus:border-indigo-500"
                 rows="4" placeholder="Parlez un peu de vous...">{{ old('bio', $user->bio) }}</textarea>
             <x-input-error class="mt-2" :messages="$errors->get('bio')" />
         </div>

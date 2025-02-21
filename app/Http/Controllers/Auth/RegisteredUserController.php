@@ -33,10 +33,11 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'pseudo' => ['required', 'string', 'max:255'],
-            'profile_photo' => ['file', 'mimes:jpg,png,gif','required', 'max:255'],
+            'bio' => ['nullable', 'string', 'max:255'],
+            'profile_photo' => ['image', 'mimes:jpg,png,gif','required', 'max:25500'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-
+        
         if($request->hasFile('profile_photo')){
             $image = $request->file('profile_photo');
             $imageName = time() . "." . $image->extension();
@@ -47,6 +48,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'pseudo' => $request->pseudo,
             'profile_photo' => $imagePath,
+            'bio' => $request->bio ?? '', 
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
