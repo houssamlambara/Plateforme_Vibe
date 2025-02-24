@@ -27,6 +27,12 @@
                         {{ __('Post') }}
                     </x-nav-link>
                 </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('friends')" :active="request()->routeIs('friends')">
+                        {{ __('Friends') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
@@ -37,7 +43,8 @@
                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
                             <div class="flex gap-2">
                                 <div><img height="25px" width="25px" class="rounded-full"
-                                        src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt=""></div>
+                                        src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="">
+                                </div>
                                 <div>{{ Auth::user()->name }}</div>
                             </div>
                             <div class="ms-1">
