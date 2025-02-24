@@ -31,14 +31,15 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'pseudo' => ['required', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:255'],
-            'profile_photo' => ['image', 'mimes:jpg,png,gif','required', 'max:25500'],
+            'profile_photo' => ['image', 'mimes:jpg,png,gif', 'required', 'max:25500'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'phone' => ['required', 'string', 'max:15', 'unique:users'],  
         ]);
-        
-        if($request->hasFile('profile_photo')){
+
+        if ($request->hasFile('profile_photo')) {
             $image = $request->file('profile_photo');
             $imageName = time() . "." . $image->extension();
             $imagePath = $image->storeAs('uploads', $imageName, 'public');
@@ -48,9 +49,11 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'pseudo' => $request->pseudo,
             'profile_photo' => $imagePath,
-            'bio' => $request->bio ?? '', 
+            'bio' => $request->bio ?? '',
             'email' => $request->email,
+            'phone' => $request->phone,  
             'password' => Hash::make($request->password),
+            'phone' => $request->phone,
         ]);
 
         event(new Registered($user));

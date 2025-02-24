@@ -28,7 +28,7 @@
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)"
                 required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
-        </div>
+        </div>        
 
         <div>
             <x-input-label for="pseudo" :value="__('Pseudo')" />
@@ -65,7 +65,7 @@
         </div>
 
         <div>
-            <x-input-label for="bio" :value="__('bio')" />
+            <x-input-label for="bio" :value="__('Bio')" />
             <textarea id="bio" name="bio"
                 class="mt-1 block w-full bg-gray-800 text-white border border-gray-600 rounded-md p-3 focus:ring focus:ring-indigo-500 focus:border-indigo-500"
                 rows="4" placeholder="Parlez un peu de vous...">{{ old('bio', $user->bio) }}</textarea>
