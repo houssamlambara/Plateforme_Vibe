@@ -11,7 +11,7 @@
             <div class="p-6">
                 <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400 mb-5 text-center mb-6">Nouvelle
                     publication</h3>
-                <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+                <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div>
                         <label for="title"
@@ -100,8 +100,7 @@
                                     class="relative w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800">
                                     <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400 mb-4 text-center">
                                         Modifier la publication</h3>
-                                    <form action="{{ route('posts.update', $post->id) }}" method="POST"
-                                        enctype="multipart/form-data">
+                                    <form action="{{ route('posts.update', $post->id) }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT') <!-- Utilise PUT ou PATCH pour la mise à jour -->
                                         <div class="mb-4">
