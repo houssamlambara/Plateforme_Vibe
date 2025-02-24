@@ -9,6 +9,5 @@ class Post extends Model
 {
     use HasFactory;
 
-    // Indique les champs qui peuvent être assignés en masse
-    protected $fillable = ['title', 'content'];
+    protected $fillable = ['title', 'content', 'image'];
 }

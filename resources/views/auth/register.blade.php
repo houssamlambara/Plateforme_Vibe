@@ -50,7 +50,7 @@
                 autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+        </div>  
 
         <!-- Confirm Password -->
         <div class="mt-4">

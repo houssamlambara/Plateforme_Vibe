@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\PostController;
 
 
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -33,7 +32,8 @@ Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
 // Afficher tous les posts
 Route::match(['get', 'post'], '/posts', [PostController::class, 'index'])->name('post');
 
-Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
-
+Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+Route::resource('posts', PostController::class);
 
 require __DIR__ . '/auth.php';

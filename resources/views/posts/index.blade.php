@@ -1,117 +1,155 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Créer un nouveau post') }}
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            {{ __('Gestion des publications') }}
         </h2>
     </x-slot>
 
-    <div class="container mx-auto px-4 py-8">
-        <div class="max-w-2xl mx-auto">
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold text-purple-800 mb-4">Créer un nouveau post</h2>
-                <form action="{{ route('posts.store') }}" method="POST">
+    <!-- Section Création de Post -->
+    <div class="py-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400 mb-5 text-center mb-6">Nouvelle
+                    publication</h3>
+                <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
                     @csrf
-                    <div class="mb-4">
-                        <label for="title" class="block text-sm font-semibold text-gray-700">Titre</label>
+                    <div>
+                        <label for="title"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Titre</label>
                         <input type="text" id="title" name="title"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            placeholder="Entrez un titre accrocheur" required>
                     </div>
-                    <div class="mb-4">
-                        <label for="content" class="block text-sm font-semibold text-gray-700">Contenu</label>
-                        <textarea id="content" name="content" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required></textarea>
+                    <div>
+                        <label for="content"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Contenu</label>
+                        <textarea id="content" name="content" rows="5"
+                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            placeholder="Partagez vos idées ici..." required></textarea>
                     </div>
-                    <button type="submit" class="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600">Créer
-                        le post</button>
+                    <div>
+                        <label for="image"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ajouter une
+                            image</label>
+                        <input type="file" id="image" name="image" accept="image/*"
+                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    </div>
+                    <div class="pt-2 flex justify-center">
+                        <button type="submit"
+                            class="flex justify-center items-center gap-2 bg-[#1877F2] hover:bg-[#145dbf] text-white font-semibold py-2 px-6 rounded-md shadow-md transition-all duration-200 ease-in-out transform hover:-translate-y-0.5 mt-6">
+                            Publier
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Edit Post Modal -->
-    <div id="editPostModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-        <div class="bg-white rounded-lg shadow-lg p-6 w-96">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">Modifier le post</h2>
-            <form id="editPostForm" action="" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="space-y-4">
-                    <div>
-                        <label for="editTitle" class="block text-gray-700 font-semibold mb-2">Titre</label>
-                        <input type="text" id="editTitle" name="title"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-pink-500">
-                    </div>
-                    <div>
-                        <label for="editContent" class="block text-gray-700 font-semibold mb-2">Contenu</label>
-                        <textarea id="editContent" name="content" rows="4"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-pink-500"></textarea>
-                    </div>
-                    <div class="flex justify-end space-x-2">
-                        <button type="button" onclick="closeEditModal()"
-                            class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
-                            Annuler
-                        </button>
-                        <button type="submit" class="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600">
-                            Sauvegarder
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Display Posts -->
-    <div class="container mx-auto px-4 py-8">
-        <div class="max-w-2xl mx-auto">
-            <h2 class="text-xl font-bold text-purple-800 mb-4">Mes posts</h2>
-
+    <!-- Section Liste des Posts -->
+    <div class="pb-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400 mb-5 text-center">Vos publications</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
             @foreach ($posts as $post)
-                <div class="bg-white rounded-lg shadow-lg p-6 relative mb-6">
-                    <div class="absolute top-4 right-4 flex space-x-2">
-                        <!-- Button to trigger edit modal -->
-                        <button
-                            onclick="openEditModal('{{ $post->id }}', '{{ $post->title }}', '{{ $post->content }}')"
-                            class="text-purple-500 hover:text-purple-600">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <!-- Delete Post Form -->
-                        <form action="{{ route('posts.destroy', $post->id) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-pink-500 hover:text-pink-600">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </div>
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden group hover:shadow-lg transition duration-200">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start">
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">{{ $post->title }}
+                            </h4>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-3">{{ $post->content }}</p>
 
-                    <h3 class="text-lg font-semibold text-purple-700 mb-2">{{ $post->title }}</h3>
-                    <p class="text-gray-600 mb-4">{{ $post->content }}</p>
-                    <div class="text-sm text-gray-500">
-                        Publié le {{ $post->created_at->format('d/m/Y à H:i') }}
+                        <!-- Affichage de l'image si elle existe -->
+                        @if ($post->image)
+                            <div class="overflow-hidden rounded-lg mt-4">
+                                <img class="h-32 w-32 object-cover" src="{{ Storage::url($post->image) }}"
+                                    alt="Image du post">
+                            </div>
+                        @endif
+
+                        <div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {{ $post->created_at->format('d/m/Y à H:i') }}
+                        </div>
+
+                        <!-- Boutons de modification et suppression centrés -->
+                        <div class="flex justify-center gap-4 mt-4">
+                            <button data-modal-toggle="modal-edit-{{ $post->id }}"
+                                class="text-blue-600 hover:text-blue-800 font-medium">
+                                Modifier
+                            </button>
+                            <form action="{{ route('posts.destroy', $post->id) }}" method="POST"
+                                onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette publication ?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-800 font-medium">
+                                    Supprimer
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Modal pour modifier -->
+                        <div id="modal-edit-{{ $post->id }}" tabindex="-1"
+                            class="fixed inset-0 z-50 hidden overflow-y-auto">
+                            <div class="flex items-center justify-center min-h-screen p-4">
+                                <div
+                                    class="relative w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800">
+                                    <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400 mb-4 text-center">
+                                        Modifier la publication</h3>
+                                    <form action="{{ route('posts.update', $post->id) }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        @method('PUT') <!-- Utilise PUT ou PATCH pour la mise à jour -->
+                                        <div class="mb-4">
+                                            <label for="title"
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Titre</label>
+                                            <input type="text" id="title" name="title"
+                                                value="{{ $post->title }}"
+                                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="content"
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Contenu</label>
+                                            <textarea id="content" name="content" rows="5"
+                                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                required>{{ $post->content }}</textarea>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="image"
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ajouter
+                                                une image</label>
+                                            <input type="file" id="image" name="image" accept="image/*"
+                                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div class="flex justify-end gap-4">
+                                            <button type="button"
+                                                onclick="document.getElementById('modal-edit-{{ $post->id }}').classList.add('hidden');"
+                                                class="bg-gray-500 text-white px-4 py-2 rounded-md">Fermer</button>
+                                            <button type="submit"
+                                                class="bg-blue-600 text-white px-4 py-2 rounded-md">Sauvegarder</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             @endforeach
         </div>
     </div>
 
+    <!-- Script pour ouvrir et fermer le modal -->
+    <script>
+        document.querySelectorAll('[data-modal-toggle]').forEach(button => {
+            button.addEventListener('click', () => {
+                const modalId = button.getAttribute('data-modal-toggle');
+                document.getElementById(modalId).classList.toggle('hidden');
+            });
+        });
+    </script>
 </x-app-layout>
-
-<script>
-    // Function to open the edit modal and populate it with post data
-    function openEditModal(postId, title, content) {
-        // Set the action for the form to the correct route for updating the post
-        const form = document.getElementById('editPostForm');
-        form.action = `/posts/${postId}`;
-
-        // Populate the modal input fields with the current post data
-        document.getElementById('editTitle').value = title;
-        document.getElementById('editContent').value = content;
-
-        // Show the modal
-        document.getElementById('editPostModal').classList.remove('hidden');
-    }
-
-    // Function to close the edit modal
-    function closeEditModal() {
-        document.getElementById('editPostModal').classList.add('hidden');
-    }
-</script>
