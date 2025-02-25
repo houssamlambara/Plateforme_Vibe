@@ -14,8 +14,8 @@ class PostController extends Controller
     // Afficher tous les posts
     public function index()
     {
-        $posts = Post::all(); 
-        return view('posts.index', compact('posts')); 
+        $posts = Post::all();
+        return view('posts.index', compact('posts'));
     }
 
     // Enregistrer un nouveau post
@@ -65,11 +65,12 @@ class PostController extends Controller
 
         return redirect()->route('posts.index')->with('success', 'Publication mise à jour avec succès !');
     }
-    public function show()
+    public function show($id)
     {
-        $posts = Post::all(); // Récupère tous les posts
-        return view('posts.index', compact('posts')); // Affiche la liste des posts
+        $post = Post::with('comments')->findOrFail($id);
+        return view('posts.show', compact('post'));
     }
+
 
 
     // Supprimer un post
@@ -125,11 +126,6 @@ class PostController extends Controller
         $comment = Comment::findOrFail($id);
         $user = auth()->user();
 
-        // Vérifie si l'utilisateur est propriétaire du commentaire
-        if ($comment->user_id !== $user->id) {
-            return back()->with('error', 'Vous ne pouvez pas modifier ce commentaire.');
-        }
-
         return view('comments.edit', compact('comment'));
     }
 
@@ -139,19 +135,15 @@ class PostController extends Controller
             'content' => 'required|string|max:255',
         ]);
 
-        // Récupérer le commentaire ou renvoyer une erreur 404
+        // Trouver le commentaire et vérifier s'il existe
         $comment = Comment::findOrFail($id);
 
-        // Vérifier si l'utilisateur est bien le propriétaire du commentaire
-        if ($comment->user_id !== auth()->id()) {
-            return back()->with('error', 'Vous ne pouvez pas modifier ce commentaire.');
-        }
-
-        // Mettre à jour le commentaire
+        // Mettre à jour le contenu du commentaire
         $comment->update([
             'content' => $request->input('content'),
         ]);
 
+        // Rediriger avec succès
         return back()->with('success', 'Commentaire mis à jour avec succès !');
     }
 

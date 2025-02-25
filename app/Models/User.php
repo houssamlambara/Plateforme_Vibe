@@ -50,17 +50,17 @@ class User extends Authenticatable
         ];
     }
 
-    public function friends()
-    {
-        return $this->belongsToMany(User::class, 'friends')
-            ->withPivot('status')
-            ->wherePivot('status', 'accepted');
-    }
+    // public function friends()
+    // {
+    //     return $this->belongsToMany(User::class, 'friends')
+    //         ->withPivot('status')
+    //         ->wherePivot('status', 'accepted');
+    // }
 
-    public function friendRequests()
-    {
-        return $this->belongsToMany(User::class, 'friends')
-            ->withPivot('status')
-            ->wherePivot('status', 'pending');
-    }
+    // public function friendRequests()
+    // {
+    //     return $this->belongsToMany(User::class, 'friends')
+    //         ->withPivot('status')
+    //         ->wherePivot('status', 'pending');
+    // }
 }

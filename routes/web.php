@@ -5,7 +5,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\FriendController;
+// use App\Http\Controllers\FriendController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,25 +25,28 @@ Route::middleware('auth')->group(function () {
     Route::delete('/comments/{id}', [PostController::class, 'deleteComment'])->name('comments.delete');
 });
 
-// Routes pour les amis
-Route::prefix('friends')->middleware('auth')->group(function () {
-    // Envoi de demande d'ami
-    Route::post('friend-request/{friendId}', [FriendController::class, 'sendRequest'])->name('friends.sendRequest');
+// // Routes pour les amis
+// Route::prefix('friends')->middleware('auth')->group(function () {
+//     // Envoi de demande d'ami
+//     Route::post('friend-request/{friendId}', [FriendController::class, 'sendRequest'])->name('friends.sendRequest');
 
-    // Accepter ou refuser une demande d'ami
-    Route::post('friend-request/respond/{friendId}/{action}', [FriendController::class, 'respondToRequest'])->name('friends.respond');
+//     // Accepter ou refuser une demande d'ami
+//     Route::post('friend-request/respond/{friendId}/{action}', [FriendController::class, 'respondToRequest'])->name('friends.respond');
 
-    // Afficher la liste des amis
-    Route::get('/', [FriendController::class, 'showFriends'])->name('friends.index');
-});
+//     // Afficher la liste des amis
+//     Route::get('/', [FriendController::class, 'showFriends'])->name('friends.index');
+// });
 
 // Dashboard et autres routes
 Route::get('/dashboard', [ProfileController::class, 'index'])->name('dashboard');
 Route::get('/user', [ProfileController::class, 'index2'])->name('user');
-
-// Routes pour les posts
+// Afficher le formulaire de création de post
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
-Route::post('/post', [PostController::class, 'store'])->name('post');
+
+// Afficher tous les posts
+Route::match(['get', 'post'], '/posts', [PostController::class, 'index'])->name('post');
+
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
 Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
 Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');

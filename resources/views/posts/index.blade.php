@@ -16,6 +16,8 @@
                 <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data"
                     class="space-y-6 mt-8">
                     @csrf
+                    <input type="hidden" name="_method" value="POST">
+                    @csrf
                     <div>
                         <label for="title"
                             class="block text-base font-semibold text-gray-800 dark:text-gray-200 mb-2">Titre</label>
@@ -234,46 +236,46 @@
                                 <!-- Formulaire pour modifier et supprimer le commentaire -->
                                 @if ($comment->user_id === auth()->id())
                                     <div class="mb-4">
-                                        <!-- Champ de texte pour afficher/modifier le commentaire -->
+                                        <!-- Affichage du contenu du commentaire -->
+                                        <p class="text-gray-600 dark:text-gray-300 ml-10 mb-2">{{ $comment->content }}
+                                        </p>
+
+                                        <!-- Formulaire pour modifier un commentaire -->
                                         <form action="{{ route('comments.update', $comment->id) }}" method="POST"
-                                            class="inline-block w-3/4">
+                                            class="ml-10">
                                             @csrf
                                             @method('PUT')
-                                            <textarea name="content" class="w-full p-3 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                                                required>{{ $comment->content }}</textarea>
-                                        </form>
+                                            <textarea name="content"
+                                                class="w-full p-3 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white mb-2" required>{{ $comment->content }}</textarea>
 
-                                        <!-- Conteneur flex pour aligner les boutons Modifier et Supprimer sur la même ligne -->
-                                        <div class="flex gap-4 mt-2 items-center justify-start">
-                                            <!-- Bouton Modifier -->
-                                            <form action="{{ route('comments.update', $comment->id) }}"
-                                                method="POST" class="inline-block">
-                                                @csrf
-                                                @method('PUT')
+                                            <div class="flex space-x-2">
+                                                <!-- Bouton Modifier -->
                                                 <button type="submit"
                                                     class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition duration-200">
                                                     Modifier
                                                 </button>
-                                            </form>
 
-                                            <!-- Formulaire pour Supprimer le commentaire -->
-                                            <form action="{{ route('comments.delete', $comment->id) }}"
-                                                method="POST" class="inline-block">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    class="text-red-500 hover:text-red-700 transition duration-200">
+                                                <!-- Bouton Supprimer (à côté de Modifier) -->
+                                                <button type="button" form="delete-form-{{ $comment->id }}"
+                                                    class="text-red-500 hover:text-red-700 border border-red-500 py-2 px-4 rounded-lg transition duration-200">
                                                     Supprimer
                                                 </button>
-                                            </form>
-                                        </div>
+                                            </div>
+                                        </form>
+
+                                        <!-- Formulaire pour Supprimer (séparé mais lié au bouton) -->
+                                        <form id="delete-form-{{ $comment->id }}"
+                                            action="{{ route('comments.delete', $comment->id) }}" method="POST"
+                                            class="hidden">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
                                     </div>
                                 @else
                                     <p class="text-gray-600 dark:text-gray-300 ml-10">{{ $comment->content }}</p>
                                 @endif
                             </div>
                         @endforeach
-
                     </div>
                 </div>
             @endforeach
