@@ -1,57 +1,71 @@
 <?php
 
-// namespace App\Http\Controllers;
+namespace App\Http\Controllers;
 
-// use App\Models\User;
-// use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\FriendRequest;
+use Illuminate\Http\Request;
 
-// class FriendController extends Controller
-// {
-    // Envoyer une demande d'ami
-    // public function sendRequest($friendId)
-    // {
-    //     $user = auth()->user();
+class FriendController extends Controller
+{
+    public function index()
+    {
+        // Récupère tous les utilisateurs
+        $users = User::all();
 
-    //     // Vérifie si la demande n'a pas déjà été envoyée ou acceptée
-    //     if ($user->id === $friendId || $user->friends()->where('friend_id', $friendId)->exists()) {
-    //         return redirect()->back()->with('error', 'Demande déjà envoyée ou déjà ami.');
-    //     }
+        // Récupère les demandes d'amis reçues par l'utilisateur connecté avec l'expéditeur
+        $pendingRequests = auth()->user()->receivedRequests()->with('sender')->where('status', 'pending')->get();
 
-    //     // Envoie la demande d'ami
-    //     $user->friendRequests()->attach($friendId, ['status' => 'pending']);
+        // Retourne la vue avec les données
+        return view('friends.index', compact('users', 'pendingRequests'));
+    }
 
-    //     return redirect()->back()->with('success', 'Demande d\'ami envoyée.');
-    // }
+    // Méthode pour envoyer une demande d'ami
+    public function sendRequest($userId)
+    {
+        $user = User::findOrFail($userId);
 
-    // Accepter ou refuser une demande d'ami
-    // public function respondToRequest($friendId, $action)
-    // {
-    //     $user = auth()->user();
+        // Vérifie si une demande d'ami existe déjà entre l'utilisateur connecté et l'utilisateur cible
+        $existingRequest = auth()->user()->sentRequests()->where('receiver_id', $user->id)->where('status', 'pending')->first();
 
-    //     // Trouve la demande
-    //     $friendRequest = $user->friendRequests()->where('friend_id', $friendId)->first();
+        // Si aucune demande n'existe, crée une nouvelle demande
+        if (!$existingRequest) {
+            auth()->user()->sentRequests()->create([
+                'receiver_id' => $user->id,
+                'status' => 'pending'
+            ]);
+        } else {
+            // Si une demande existe déjà, vous pouvez afficher un message ou ne rien faire
+            return redirect()->route('friends.index')->with('error', 'Vous avez déjà une demande en attente.');
+        }
 
-    //     if (!$friendRequest) {
-    //         return redirect()->back()->with('error', 'Aucune demande trouvée.');
-    //     }
+        return redirect()->route('friends.index');
+    }
 
-    //     if ($action === 'accept') {
-    //         $friendRequest->pivot->status = 'accepted';
-    //         $friendRequest->pivot->save();
-    //     } elseif ($action === 'decline') {
-    //         $friendRequest->pivot->status = 'declined';
-    //         $friendRequest->pivot->save();
-    //     }
+    // Méthode pour accepter une demande d'ami
+    public function acceptRequest($requestId)
+    {
+        $request = FriendRequest::findOrFail($requestId);
+        $request->status = 'accepted';
+        $request->save();
 
-    //     return redirect()->back()->with('success', 'Demande traitée.');
-    // }
+        return redirect()->route('friends.index');
+    }
 
-    // Afficher la liste des amis
-    // public function showFriends()
-    // {
-    //     $user = auth()->user();
-    //     $friends = $user->friends;
+    // Méthode pour refuser une demande d'ami
+    public function declineRequest($requestId)
+    {
+        $request = FriendRequest::findOrFail($requestId);
+        $request->status = 'declined';
+        $request->save();
 
-    //     return view('friends.index', compact('friends'));
-    // }
-// }
+        return redirect()->route('friends.index');
+    }
+    public function cancelSentRequests()
+    {
+        // Mettre à jour toutes les demandes envoyées pour les marquer comme "annulées"
+        auth()->user()->sentRequests()->update(['status' => 'cancelled']);
+
+        return redirect()->route('friends.index')->with('success', 'Toutes les demandes envoyées ont été annulées.');
+    }
+}

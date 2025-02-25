@@ -5,7 +5,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\PostController;
-// use App\Http\Controllers\FriendController;
+use App\Http\Controllers\FriendController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,16 +26,14 @@ Route::middleware('auth')->group(function () {
 });
 
 // // Routes pour les amis
-// Route::prefix('friends')->middleware('auth')->group(function () {
-//     // Envoi de demande d'ami
-//     Route::post('friend-request/{friendId}', [FriendController::class, 'sendRequest'])->name('friends.sendRequest');
-
-//     // Accepter ou refuser une demande d'ami
-//     Route::post('friend-request/respond/{friendId}/{action}', [FriendController::class, 'respondToRequest'])->name('friends.respond');
-
-//     // Afficher la liste des amis
-//     Route::get('/', [FriendController::class, 'showFriends'])->name('friends.index');
-// });
+Route::middleware(['auth'])->group(function () {
+    Route::get('/friends', [FriendController::class, 'index'])->name('friends.index');
+    Route::post('/friends/send/{user}', [FriendController::class, 'sendRequest'])->name('friends.sendRequest');
+    Route::post('/friends/accept/{request}', [FriendController::class, 'acceptRequest'])->name('friends.acceptRequest');
+    Route::post('/friends/decline/{request}', [FriendController::class, 'declineRequest'])->name('friends.declineRequest');
+    Route::post('/friends/clear-sent-requests', [FriendController::class, 'clearSentRequests'])->name('friends.clearSentRequests');
+    Route::post('/friends/cancel-sent-requests', [FriendController::class, 'cancelSentRequests'])->name('friends.cancelSentRequests');
+});
 
 // Dashboard et autres routes
 Route::get('/dashboard', [ProfileController::class, 'index'])->name('dashboard');

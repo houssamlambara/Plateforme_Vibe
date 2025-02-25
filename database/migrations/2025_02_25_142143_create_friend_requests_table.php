@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('receiver_id')->constrained('users')->onDelete('cascade');
-            $table->enum('status', ['pending', 'accepted', 'declined'])->default('pending');
+            $table->string('status')->default('pending'); // 'pending', 'accepted', 'declined'
             $table->timestamps();
+
         });
     }
 
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('friends');
+        Schema::dropIfExists('friend_requests');
     }
 };
