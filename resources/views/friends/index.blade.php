@@ -18,7 +18,8 @@
                     <div class="flex items-center space-x-4">
                         <img src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : asset('images/default-avatar.png') }}"
                             alt="{{ $user->name }}'s profile picture" class="w-12 h-12 rounded-full object-cover">
-                        <div class="text-lg font-medium text-gray-700 dark:text-gray-300">{{ $user->name }}</div>
+                        <div class="text-lg font-medium text-gray-700 dark:text-gray-300 ml-4">{{ $user->name }}</div>
+                        <!-- Ajout d'un espace -->
                     </div>
 
                     <div>
