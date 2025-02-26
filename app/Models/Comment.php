@@ -11,13 +11,11 @@ class Comment extends Model
 
     protected $fillable = ['content', 'user_id', 'post_id'];
 
-    // Relation avec l'utilisateur
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Relation avec le post
     public function post()
     {
         return $this->belongsTo(Post::class);

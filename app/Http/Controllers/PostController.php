@@ -11,14 +11,12 @@ use App\Models\Comment;
 
 class PostController extends Controller
 {
-    // Afficher tous les posts
     public function index()
     {
         $posts = Post::all();
         return view('posts.index', compact('posts'));
     }
 
-    // Enregistrer un nouveau post
     public function store(Request $request)
     {
         $request->validate([
@@ -38,7 +36,6 @@ class PostController extends Controller
         return redirect()->route('posts.index')->with('success', 'Publication créée avec succès !');
     }
 
-    // Mettre à jour un post existant
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -73,7 +70,6 @@ class PostController extends Controller
 
 
 
-    // Supprimer un post
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
@@ -143,7 +139,6 @@ class PostController extends Controller
             'content' => $request->input('content'),
         ]);
 
-        // Rediriger avec succès
         return back()->with('success', 'Commentaire mis à jour avec succès !');
     }
 
@@ -159,7 +154,6 @@ class PostController extends Controller
 
         $comment->delete();
 
-        // Redirige vers la même page avec un message de succès
         return back()->with('success', 'Commentaire supprimé avec succès !');
     }
 }

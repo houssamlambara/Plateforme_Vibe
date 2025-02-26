@@ -10,17 +10,14 @@ class FriendController extends Controller
 {
     public function index()
     {
-        // Récupère tous les utilisateurs
         $users = User::all();
 
         // Récupère les demandes d'amis reçues par l'utilisateur connecté avec l'expéditeur
         $pendingRequests = auth()->user()->receivedRequests()->with('sender')->where('status', 'pending')->get();
 
-        // Retourne la vue avec les données
         return view('friends.index', compact('users', 'pendingRequests'));
     }
 
-    // Méthode pour envoyer une demande d'ami
     public function sendRequest($userId)
     {
         $user = User::findOrFail($userId);
@@ -35,14 +32,12 @@ class FriendController extends Controller
                 'status' => 'pending'
             ]);
         } else {
-            // Si une demande existe déjà, vous pouvez afficher un message ou ne rien faire
             return redirect()->route('friends.index')->with('error', 'Vous avez déjà une demande en attente.');
         }
 
         return redirect()->route('friends.index');
     }
 
-    // Méthode pour accepter une demande d'ami
     public function acceptRequest($requestId)
     {
         $request = FriendRequest::findOrFail($requestId);
@@ -52,7 +47,6 @@ class FriendController extends Controller
         return redirect()->route('friends.index');
     }
 
-    // Méthode pour refuser une demande d'ami
     public function declineRequest($requestId)
     {
         $request = FriendRequest::findOrFail($requestId);
