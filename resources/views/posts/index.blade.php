@@ -103,7 +103,7 @@
                                 </svg>
                                 Modifier
                             </button>
-                            <form action="{{ route('posts.destroy', $post->id) }}" method="POST"
+                            <form action="{{ route('comments.delete', $post->id) }}" method="POST"
                                 onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette publication ?')">
                                 @csrf
                                 @method('DELETE')
@@ -255,8 +255,8 @@
                                                     Modifier
                                                 </button>
 
-                                                <!-- Bouton Supprimer (à côté de Modifier) -->
-                                                <button type="button" form="delete-form-{{ $comment->id }}"
+                                                <!-- Bouton Supprimer (correctement configuré) -->
+                                                <button type="submit" form="delete-form-{{ $comment->id }}"
                                                     class="text-red-500 hover:text-red-700 border border-red-500 py-2 px-4 rounded-lg transition duration-200">
                                                     Supprimer
                                                 </button>
@@ -272,14 +272,14 @@
                                         </form>
                                     </div>
                                 @else
-                                    <p class="text-gray-600 dark:text-gray-300 ml-10">{{ $comment->content }}</p>
-                                @endif
-                            </div>
-                        @endforeach
+                                <p class="text-gray-600 dark:text-gray-300 ml-10">{{ $comment->content }}</p>
+                        @endif
                     </div>
-                </div>
             @endforeach
         </div>
+    </div>
+    @endforeach
+    </div>
     </div>
 
     <!-- Script pour ouvrir et fermer le modal -->

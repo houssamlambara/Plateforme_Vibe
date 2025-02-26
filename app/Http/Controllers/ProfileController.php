@@ -96,4 +96,9 @@ class ProfileController extends Controller
     {
         return view('user');
     }
+
+    public function show(User $user)
+    {
+        return view('profile.show', compact('user'));
+    }
 }

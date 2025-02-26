@@ -48,7 +48,7 @@ Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
 Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
 Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
-Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
+Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
 Route::resource('posts', PostController::class);
 
 // Routes pour les commentaires sur les posts
